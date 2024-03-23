@@ -7,6 +7,7 @@ use std::str::FromStr;
 pub struct MaterialColors {
     pub dark: bool,
     pub base_color: String,
+    pub zoom: f32,
     pub primary: Color32,
     pub on_primary: Color32,
     pub primary_container: Color32,
@@ -62,11 +63,19 @@ fn c(i: Argb) -> Color32 {
 }
 
 impl MaterialColors {
+
+    pub fn new(base_color: String, dark: bool, zoom: f32) -> Self {
+        let mut new = Self::default();
+        new.base_color = base_color;
+        new.dark = dark;
+        new.zoom = zoom;
+        new
+    }
     /// exports the default M3 theme
     /// this function applies M3 themes to egui assets, specific implementation is subject to change
     /// CANNOT apply zoom
-    pub fn export(base_color: String, dark: bool) -> Style {
-        let p = MaterialColors::from_values(base_color, dark);
+    pub fn export(&self) -> Style {
+        let p = self.from_values();
 
         let visuals = Visuals {
             override_text_color: Some(p.primary),
@@ -112,32 +121,33 @@ impl MaterialColors {
         }
     }
     /// applies generated values to ctx
-    pub fn apply(base_color: String, dark: bool, zoom: f32, ctx: &Context) {
-        ctx.set_style(Self::export(base_color, dark));
-        ctx.set_zoom_factor(zoom);
+    pub fn apply(&self, ctx: &Context) {
+        ctx.set_style(self.export());
+        ctx.set_zoom_factor(self.zoom);
     }
     /// applies generated values to Ui
     /// CANNOT apply zoom
-    pub fn apply_ui(base_color: String, dark: bool, ui: &mut Ui) {
-        ui.set_style(Self::export(base_color, dark))
+    pub fn apply_ui(&self, ui: &mut Ui) {
+        ui.set_style(self.export())
     }
 
     /// creates color palette
-    pub fn from_values(base_color: impl Into<String>, dark: bool) -> Self {
-        let base_color = base_color.into();
+    pub fn from_values(&self) -> Self {
+        let base_color = self.base_color.clone();
         let scheme = material_colors::theme_from_source_color(
             Argb::from_str(&base_color).unwrap(),
             Default::default(),
         )
         .schemes;
-        let scheme = match dark {
+        let scheme = match self.dark {
             true => scheme.dark,
             false => scheme.light,
         };
 
         Self {
             base_color,
-            dark,
+            dark: self.dark,
+            zoom: self.zoom,
             // primary
             primary: c(scheme.primary),
             on_primary: c(scheme.on_primary),
