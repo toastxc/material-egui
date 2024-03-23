@@ -12,3 +12,22 @@ M3-EGUI
 [![Contributors](https://img.shields.io/github/contributors/toastxc/material3-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/Reywen-Revolt/graphs/contributors)
 [![Licence](https://img.shields.io/github/license/toastxc/material3-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/Reywen-Revolt/blob/main/LICENCE)
 </h1>
+
+## About
+M3-EGUI (material-egui) is a library that takes an input color and generates a color palette using M3 colors. It then apples those colors to the Egui components.
+
+## Installation
+```rust
+cargo install material-egui
+```
+## Adding to projects
+### Cargo.toml
+```toml
+material-egui = "*"
+```
+### main.rs
+This can be done anywhere that CTX is available
+```rust
+// input color, is_dark_theme, zoom scale
+material_egui::apply(String::from("F0F"), true, 1.5, &ctx);
+```
