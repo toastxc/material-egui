@@ -65,6 +65,8 @@ fn update_fn(value: &mut App, ui: &mut Ui) {
             value.base_color = data;
         }
     });
+
+    ui.label("LABEL TEST");
     // Slider::new( &mut value.base_tone, 10..=90, ).ui(ui);
 
     ui.checkbox(&mut value.dark_theme, "Dark Theme");

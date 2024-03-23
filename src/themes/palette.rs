@@ -1,7 +1,7 @@
 use egui::Color32;
 use material_colors::Argb;
 use std::str::FromStr;
-#[derive(Clone, Default)]
+#[derive(Clone, Default, Debug)]
 pub struct Palettes2 {
     pub dark: bool,
     pub base_color: String,

@@ -8,8 +8,9 @@ use crate::themes::palette::Palettes2;
 
 pub fn apply(base_color: String, dark: bool, zoom: f32, ctx: &Context) {
     let p = Palettes2::from_values(base_color, dark);
+
     let visuals = Visuals {
-        override_text_color: None,
+        override_text_color: Some(p.primary),
         hyperlink_color: p.on_primary,
         // background
         faint_bg_color: p.surface_container,
