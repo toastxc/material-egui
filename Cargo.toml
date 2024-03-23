@@ -1,5 +1,5 @@
 [package]
-name = "material3-egui"
+name = "material-egui"
 version = "0.1.0"
 edition = "2021"
 authors = ["ToastXC contact@toastxc.xyz"]
