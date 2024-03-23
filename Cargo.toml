@@ -1,0 +1,24 @@
+[package]
+name = "material3-egui"
+version = "0.1.0"
+edition = "2021"
+authors = ["ToastXC contact@toastxc.xyz"]
+license = "GPL-3.0-only"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+egui = { version = "0.26.2", default-features = false }
+material-colors = { version = "0.2.1", default-features = false }
+
+
+[dev-dependencies]
+egui = "0.26.2"
+material-egui = {path = "."}
+eframe = "0.26.2"
+dotenv = "0.15.0"
+
+
+[[example]]
+name = "demo"
+path = "examples/demo.rs"
