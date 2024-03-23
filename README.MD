@@ -26,10 +26,11 @@ cargo install material-egui
 material-egui = "*"
 ```
 ### main.rs
-This can be done anywhere that CTX is available
+This can be done anywhere that CTX is available.
+The same can be done with Ui but this is not recommended
 ```rust
 // input color, is_dark_theme, zoom scale
-material_egui::apply(String::from("F0F"), true, 1.5, &ctx);
+MaterialColors::new(String::from("F0F"), true, 1.5).apply(&ctx);
 ```
 
 ## FAQ
