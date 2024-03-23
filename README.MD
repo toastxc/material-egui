@@ -31,3 +31,26 @@ This can be done anywhere that CTX is available
 // input color, is_dark_theme, zoom scale
 material_egui::apply(String::from("F0F"), true, 1.5, &ctx);
 ```
+
+## FAQ
+
+### What features does this have currently?
+- [x] material color design
+- [x] dark and light theme support
+- [x] hot reloading
+- [x] Egui default components
+- [ ] wallpaper color picking
+- [ ] M3 animations
+- [ ] M3 styled components
+
+### Will this work on my project?
+Yes it will, as long as you have the following minimum versions
+```toml
+egui = "0.26.2"
+eframe = "0.26.2"
+```
+
+
+## Thanks
+Special thanks to the Egui team, and the people who made `material-colors` who made this project possible.
+

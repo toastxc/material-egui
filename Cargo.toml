@@ -16,8 +16,9 @@ material-colors = { version = "0.2.1", default-features = false }
 
 [dev-dependencies]
 egui = "0.26.2"
-material-egui = {path = "."}
 eframe = "0.26.2"
+material-egui = {path = "."}
+
 dotenv = "0.15.0"
 
 
