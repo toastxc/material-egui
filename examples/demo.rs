@@ -4,6 +4,7 @@ use egui::{vec2, Context, Slider, Ui, Widget};
 use material_colors::Argb;
 use std::env;
 use std::str::FromStr;
+use material_egui::MaterialColors;
 
 static MIN_WIDTH: f32 = 300.0;
 static DEFAULT_WIDTH: f32 = 480.0;
@@ -48,7 +49,7 @@ impl Default for App {
 impl eframe::App for App {
     fn update(&mut self, ctx: &Context, _frame: &mut Frame) {
         // this single line applies the M3 theme, but the values can be hard coded as well
-        material_egui::apply(self.base_color.clone(), self.dark_theme, 1.5, &ctx);
+        MaterialColors::apply(self.base_color.clone(), self.dark_theme, 1.5, &ctx);
         //    material_egui::apply(String::from("F0F"), true, 1.5, &ctx);
 
         egui::CentralPanel::default().show(ctx, |ui| update_fn(self, ui));
