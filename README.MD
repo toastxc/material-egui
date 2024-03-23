@@ -1,7 +1,7 @@
 <h1 align="center">
   <img src="https://github.com/toastxc/material3-egui/blob/main/README_RESOURCES/example1.png" alt="Demo image 1" width="30%" height="30%">
- <img src="https://github.com/toastxc/material3-egui/blob/main/README_RESOURCES/example1.png" alt="Demo image 2" width="30%" height="30%">
- <img src="https://github.com/toastxc/material3-egui/blob/main/README_RESOURCES/example1.png" alt="Demo image 3" width="30%" height="30%">
+ <img src="https://github.com/toastxc/material3-egui/blob/main/README_RESOURCES/example2.png" alt="Demo image 2" width="30%" height="30%">
+ <img src="https://github.com/toastxc/material3-egui/blob/main/README_RESOURCES/example3.png" alt="Demo image 3" width="30%" height="30%">
 
 M3-EGUI 
 
