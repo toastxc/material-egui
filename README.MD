@@ -14,7 +14,7 @@ M3-EGUI
 </h1>
 
 ## About
-M3-EGUI (material-egui) is a library that takes an input color and generates a color palette using M3 colors. It then apples those colors to the Egui components.
+M3-EGUI (material-egui) is a library that takes an input color and generates a color palette using M3 colors. It then applies those colors to the Egui components.
 
 ## Installation
 ```rust
