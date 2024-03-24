@@ -5,12 +5,12 @@
 
 M3-EGUI 
 
-[![Stars](https://img.shields.io/github/stars/toastxc/material3-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/Reywen-Revolt/stargazers)
-[![Forks](https://img.shields.io/github/forks/toastxc/material3-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/Reywen-Revolt/network/members)
-[![Pull Requests](https://img.shields.io/github/issues-pr/toastxc/material3-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/Reywen-Revolt/pulls)
-[![Issues](https://img.shields.io/github/issues/toastxc/material3-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/Reywen-Revolt/issues)
-[![Contributors](https://img.shields.io/github/contributors/toastxc/material3-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/Reywen-Revolt/graphs/contributors)
-[![Licence](https://img.shields.io/github/license/toastxc/material3-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/Reywen-Revolt/blob/main/LICENCE)
+[![Stars](https://img.shields.io/github/stars/toastxc/material-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/material-egui/stargazers)
+[![Forks](https://img.shields.io/github/forks/toastxc/material-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/material-egui/network/members)
+[![Pull Requests](https://img.shields.io/github/issues-pr/toastxc/material-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/material-egui/pulls)
+[![Issues](https://img.shields.io/github/issues/toastxc/material-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/material-egui/issues)
+[![Contributors](https://img.shields.io/github/contributors/toastxc/material-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/material-egui/graphs/contributors)
+[![Licence](https://img.shields.io/github/license/toastxc/material-egui?style=flat-square&logoColor=white)](https://github.com/toastxc/material-egui/blob/main/LICENCE)
 </h1>
 
 ## About
@@ -50,7 +50,23 @@ Yes it will, as long as you have the following minimum versions
 egui = "0.26.2"
 eframe = "0.26.2"
 ```
+### Why does (insert element here) look weird / unreadable text?
+I have not tested every element combination and there is probably a few edge cases, make sure to create an issue for them to be resolved
 
+### How do I create use the error style?
+You will need a scope and the error style changer, this is a temporary solution until I find a better one
+```rust
+// this scope applies error colors to all elements inside
+    ui.scope(|ui| {
+        MaterialColors::new(String::from("F0F"), true, 1.5).error_apply(ui);
+        ui.button("Error button!")
+    });
+// alternatively, if you already have your colors defined
+    ui.scope(|ui| {
+        self.colors.error_apply(ui);
+        ui.button("Error button!")
+    });
+```
 
 ## Thanks
 Special thanks to the Egui team, and the people who made `material-colors` who made this project possible.
