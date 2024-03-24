@@ -1,6 +1,6 @@
 use dotenv::dotenv;
 use eframe::Frame;
-use egui::{vec2, Context, Slider, Ui, Widget};
+use egui::{vec2, CollapsingHeader, Context, Slider, Ui, Widget};
 use material_colors::Argb;
 use material_egui::MaterialColors;
 use std::env;
@@ -33,6 +33,7 @@ struct App {
     edit_base_color: String,
     dark_theme: bool,
     enabled: bool,
+    options_open: bool,
 }
 
 impl Default for App {
@@ -42,6 +43,7 @@ impl Default for App {
             edit_base_color: env::var("BASE_COLOR").unwrap(),
             dark_theme: env::var("DARK_THEME").unwrap().parse().unwrap(),
             enabled: true,
+            options_open: true,
         }
     }
 }
@@ -54,26 +56,37 @@ impl eframe::App for App {
 }
 
 fn update_fn(value: &mut App, ui: &mut Ui) {
-    ui.horizontal(|ui| {
-        ui.text_edit_singleline(&mut value.edit_base_color);
+    // if color is valid, change color palette
+    ui.text_edit_singleline(&mut value.edit_base_color);
+    let data = value.edit_base_color.clone().to_ascii_uppercase();
+    if Argb::from_str(&data).is_ok() {
+        value.edit_base_color = data.clone();
+        value.base_color = data;
+    }
 
-        let data = value.edit_base_color.clone().to_ascii_uppercase();
-        if Argb::from_str(&data).is_ok() {
-            value.edit_base_color = data.clone();
-            value.base_color = data;
-        }
+    // this scope applies error colors to all elements inside
+    ui.scope(|ui| {
+        MaterialColors::new(value.base_color.clone(), value.dark_theme, 1.5).error_apply(ui);
+        ui.button("Error button!")
     });
 
-    ui.label("LABEL TEST");
-    // Slider::new( &mut value.base_tone, 10..=90, ).ui(ui);
+    let _ = ui.button("Regular button!");
+    ui.label("Simple label");
 
-    ui.checkbox(&mut value.dark_theme, "Dark Theme");
-    // Palettes2::from_values(value.base_color.clone(), value.dark_theme)'
+    CollapsingHeader::new("Options")
+        .default_open(value.options_open)
+        .show(ui, |ui| {
+            ui.horizontal(|ui| {
+                ui.checkbox(&mut value.dark_theme, "Dark Theme");
+                ui.checkbox(&mut value.enabled, "Enabled");
+            });
+        });
 
-    let mut var = 50;
-
-    ui.checkbox(&mut value.enabled, "Enabled");
     ui.add_enabled_ui(value.enabled, |ui| {
-        Slider::new(&mut var, 0..=100).trailing_fill(true).ui(ui);
+        Slider::new(&mut 50, 0..=100).trailing_fill(true).ui(ui);
     });
+
+    ui.add_space(10.);
+
+    ui.label("Whats your favorite color theme? personally mine is #AAE");
 }
