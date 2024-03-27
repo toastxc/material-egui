@@ -10,17 +10,19 @@ description = "Material Design color theme generator for Egui"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-egui = { git = "https://github.com/emilk/egui", branch = "master" }
-
+# egui git contains the latest bug fixes, however it cannot be commited to crates.io
+#egui = { git = "https://github.com/emilk/egui", branch = "master" }
+egui = "0.27.0"
 material-colors = { version = "0.2.1", default-features = false }
 
 
 [dev-dependencies]
-egui = { git = "https://github.com/emilk/egui", branch = "master" }
+#egui = { git = "https://github.com/emilk/egui", branch = "master" }
 # if you're using eframe:
-eframe = { git = "https://github.com/emilk/egui", branch = "master" }
+#eframe = { git = "https://github.com/emilk/egui", branch = "master" }
+egui = "0.27.0"
+eframe = "0.27.0"
 material-egui = {path = "."}
-
 dotenv = "0.15.0"
 
 
