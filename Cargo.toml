@@ -1,6 +1,6 @@
 [package]
 name = "material-egui"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 authors = ["ToastXC contact@toastxc.xyz"]
 license = "GPL-3.0-only"
@@ -27,6 +27,6 @@ dotenv = "0.15.0"
 [[example]]
 name = "demo"
 path = "examples/demo.rs"
-[[example]]
-name = "palette"
-path = "examples/palette.rs"
+#[[example]]
+#name = "palette"
+#path = "examples/palette.rs"
