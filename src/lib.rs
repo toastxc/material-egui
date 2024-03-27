@@ -1,5 +1,5 @@
 use egui::style::{Selection, WidgetVisuals, Widgets};
-use egui::{epaint, Color32, Context, Style, Ui, Visuals};
+use egui::{epaint, Color32, Context, Stroke, Style, Ui, Visuals};
 use material_colors::Argb;
 use std::str::FromStr;
 
@@ -77,6 +77,7 @@ impl MaterialColors {
             base_color,
             dark,
             zoom,
+
             // primary
             primary: c(scheme.primary),
             on_primary: c(scheme.on_primary),
@@ -138,76 +139,7 @@ impl MaterialColors {
     /// this function applies M3 themes to egui assets, specific implementation is subject to change
     /// CANNOT apply zoom
     pub fn export(&self) -> Style {
-        let base_color = self.base_color.clone();
-        let scheme = material_colors::theme_from_source_color(
-            Argb::from_str(&base_color).unwrap(),
-            Default::default(),
-        )
-        .schemes;
-        let scheme = match self.dark {
-            true => scheme.dark,
-            false => scheme.light,
-        };
-        let p = Self {
-            base_color,
-            dark: self.dark,
-            zoom: self.zoom,
-            // primary
-            primary: c(scheme.primary),
-            on_primary: c(scheme.on_primary),
-            primary_container: c(scheme.primary_container),
-            on_primary_container: c(scheme.on_primary_container),
-            inverse_primary: c(scheme.inverse_primary),
-            primary_fixed: c(scheme.primary_fixed),
-            primary_fixed_dim: c(scheme.primary_fixed_dim),
-            on_primary_fixed: c(scheme.on_primary_fixed),
-            on_primary_fixed_variant: c(scheme.on_primary_fixed_variant),
-            // secondary
-            secondary: c(scheme.secondary),
-            on_secondary: c(scheme.on_secondary),
-            secondary_container: c(scheme.secondary_container),
-            on_secondary_container: c(scheme.on_secondary_container),
-            secondary_fixed: c(scheme.secondary_fixed),
-            secondary_fixed_dim: c(scheme.secondary_fixed_dim),
-            on_secondary_fixed: c(scheme.on_secondary_fixed),
-            on_secondary_fixed_variant: c(scheme.on_secondary_fixed_variant),
-            // tertiary
-            tertiary: c(scheme.tertiary),
-            on_tertiary: c(scheme.on_tertiary),
-            tertiary_container: c(scheme.tertiary_container),
-            on_tertiary_container: c(scheme.on_tertiary_container),
-            tertiary_fixed: c(scheme.tertiary_fixed),
-            tertiary_fixed_dim: c(scheme.tertiary_fixed_dim),
-            on_tertiary_fixed: c(scheme.on_tertiary_fixed),
-            on_tertiary_fixed_variant: c(scheme.on_tertiary_fixed_variant),
-            // error
-            error: c(scheme.error),
-            on_error: c(scheme.on_error),
-            error_container: c(scheme.error_container),
-            on_error_container: c(scheme.on_error_container),
-            // surface
-            surface_dim: c(scheme.surface_dim),
-            surface: c(scheme.surface),
-            surface_bright: c(scheme.surface_bright),
-            surface_container_lowest: c(scheme.surface_container_lowest),
-            surface_container_low: c(scheme.surface_container_low),
-            surface_container: c(scheme.surface_container),
-            surface_container_high: c(scheme.surface_container_high),
-            surface_container_highest: c(scheme.surface_container_highest),
-            on_surface: c(scheme.on_surface),
-            on_surface_variant: c(scheme.on_surface_variant),
-            // outline
-            outline: c(scheme.outline),
-            outline_variant: c(scheme.outline_variant),
-            // inverse
-            inverse_surface: c(scheme.inverse_surface),
-            inverse_on_surface: c(scheme.inverse_on_surface),
-            surface_variant: c(scheme.surface_variant),
-            background: c(scheme.background),
-            on_background: c(scheme.on_background),
-            shadow: c(scheme.shadow),
-            scrim: c(scheme.scrim),
-        };
+        let p = self;
 
         let visuals = Visuals {
             // override_text_color: Some(p.primary),
@@ -225,15 +157,15 @@ impl MaterialColors {
             warn_fg_color: p.error_container,
             error_fg_color: p.error,
 
-            window_stroke: egui::Stroke {
+            window_stroke: Stroke {
                 color: p.secondary,
                 ..Default::default()
             },
             window_highlight_topmost: false,
+            // todo
             widgets: widgets(p.clone()),
             window_shadow: epaint::Shadow {
                 color: p.shadow,
-
                 ..Default::default()
             },
 
@@ -242,22 +174,38 @@ impl MaterialColors {
                 ..Default::default()
             },
 
+            // todo selection represents a kind of accent color for widgets outside of the widgets config
+            // this is the subject of an issue https://github.com/emilk/egui/issues/4227
             selection: Selection {
-                bg_fill: p.tertiary,
-                stroke: Default::default(),
+                bg_fill: p.secondary,
+                stroke: Stroke {
+                    width: 1.5,
+                    color: p.on_secondary,
+                },
             },
+
             ..Default::default()
         };
 
         Style {
             visuals,
+
             ..Default::default()
         }
     }
-    /// applies generated values to ctx
-    pub fn apply(&self, ctx: &Context) {
+    /// applies generated theming values to ctx
+    /// this also applies zoom value: must be stored persistently
+    pub fn apply_zoom(&mut self, ctx: &Context, first_run: &mut bool) {
+        if *first_run {
+            ctx.set_zoom_factor(self.zoom);
+            *first_run = false;
+        }
         ctx.set_style(self.export());
-        ctx.set_zoom_factor(self.zoom);
+    }
+
+    /// applies generated theming values to ctx
+    pub fn apply(&mut self, ctx: &Context) {
+        ctx.set_style(self.export());
     }
     /// applies generated values to Ui
     /// CANNOT apply zoom
@@ -283,6 +231,7 @@ fn widgets(p: MaterialColors) -> Widgets {
         false => Visuals::light(),
     }
     .widgets;
+
     widget_maker_mut(&mut old.noninteractive, p.surface, p.on_surface);
     widget_maker_mut(
         &mut old.inactive,
@@ -294,9 +243,8 @@ fn widgets(p: MaterialColors) -> Widgets {
         p.tertiary_container,
         p.on_tertiary_container,
     );
-    widget_maker_mut(&mut old.active, p.inverse_primary, p.on_primary_container);
+    widget_maker_mut(&mut old.active, p.tertiary, p.on_tertiary);
     widget_maker_mut(&mut old.open, p.primary_container, p.on_primary_container);
-
     old
 }
 fn widget_maker_mut(old: &mut WidgetVisuals, fill: Color32, text: Color32) {

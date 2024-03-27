@@ -31,6 +31,9 @@ The same can be done with Ui but this is not recommended
 ```rust
 // input color, is_dark_theme, zoom scale
 MaterialColors::new(String::from("F0F"), true, 1.5).apply(&ctx);
+
+// if you'd like the ability to scale windows AND a better default scale, use this
+MaterialColors::new(String::from("F0F"), true, 1.5).apply(&ctx, &mut self.zoom);
 ```
 
 ## FAQ

@@ -1,6 +1,6 @@
 use dotenv::dotenv;
 use eframe::Frame;
-use egui::{vec2, CollapsingHeader, Context, Slider, Ui, Widget};
+use egui::{vec2, CollapsingHeader, Context,Slider, Ui, Widget};
 use material_colors::Argb;
 use material_egui::MaterialColors;
 use std::env;
@@ -34,6 +34,7 @@ struct App {
     dark_theme: bool,
     enabled: bool,
     options_open: bool,
+    first_run: bool,
 }
 
 impl Default for App {
@@ -44,19 +45,22 @@ impl Default for App {
             dark_theme: env::var("DARK_THEME").unwrap().parse().unwrap(),
             enabled: true,
             options_open: true,
+            first_run: true,
         }
     }
 }
 
 impl eframe::App for App {
     fn update(&mut self, ctx: &Context, _frame: &mut Frame) {
-        MaterialColors::new(self.base_color.clone(), self.dark_theme, 1.5).apply(&ctx);
+        MaterialColors::new(self.base_color.clone(), self.dark_theme, 1.5)
+            .apply_zoom(ctx, &mut self.first_run);
+
         egui::CentralPanel::default().show(ctx, |ui| update_fn(self, ui));
     }
 }
 
 fn update_fn(value: &mut App, ui: &mut Ui) {
-    // if color is valid, change color palette
+    // // if color is valid, change color palette
     ui.text_edit_singleline(&mut value.edit_base_color);
     let data = value.edit_base_color.clone().to_ascii_uppercase();
     if Argb::from_str(&data).is_ok() {
@@ -64,7 +68,7 @@ fn update_fn(value: &mut App, ui: &mut Ui) {
         value.base_color = data;
     }
 
-    // this scope applies error colors to all elements inside
+    // // this scope applies error colors to all elements inside
     ui.scope(|ui| {
         MaterialColors::new(value.base_color.clone(), value.dark_theme, 1.5).error_apply(ui);
         ui.button("Error button!")
@@ -90,3 +94,4 @@ fn update_fn(value: &mut App, ui: &mut Ui) {
 
     ui.label("Whats your favorite color theme? personally mine is #AAE");
 }
+
