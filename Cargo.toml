@@ -1,6 +1,6 @@
 [package]
 name = "material-egui"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["ToastXC contact@toastxc.xyz"]
 license = "GPL-3.0-only"
@@ -17,8 +17,8 @@ material-colors = { version = "0.2.1", default-features = false }
 
 
 [dev-dependencies]
+# required for debugging
 #egui = { git = "https://github.com/emilk/egui", branch = "master" }
-# if you're using eframe:
 #eframe = { git = "https://github.com/emilk/egui", branch = "master" }
 egui = "0.27.0"
 eframe = "0.27.0"
@@ -29,6 +29,4 @@ dotenv = "0.15.0"
 [[example]]
 name = "demo"
 path = "examples/demo.rs"
-#[[example]]
-#name = "palette"
-#path = "examples/palette.rs"
+
