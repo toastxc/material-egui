@@ -1,15 +1,16 @@
 use dotenv::dotenv;
 use eframe::Frame;
-use egui::{vec2, CollapsingHeader, Context,Slider, Ui, Widget};
+use egui::{vec2, CollapsingHeader, Context, Slider, Ui, Widget};
 use material_colors::Argb;
 use material_egui::MaterialColors;
 use std::env;
+
 use std::str::FromStr;
 
 static MIN_WIDTH: f32 = 300.0;
 static DEFAULT_WIDTH: f32 = 480.0;
-static MIN_HEIGHT: f32 = 480.0;
-static DEFAULT_HEIGHT: f32 = 480.0;
+static MIN_HEIGHT: f32 = 510.0;
+static DEFAULT_HEIGHT: f32 = 550.0;
 
 fn main() {
     dotenv().ok();
@@ -29,9 +30,10 @@ fn main() {
 
 #[derive(Debug, Clone)]
 struct App {
-    base_color: String,
+    // base_color: String,
     edit_base_color: String,
-    dark_theme: bool,
+    // dark_theme: bool,
+    style: MaterialColors,
     enabled: bool,
     options_open: bool,
     first_run: bool,
@@ -40,9 +42,13 @@ struct App {
 impl Default for App {
     fn default() -> Self {
         Self {
-            base_color: env::var("BASE_COLOR").unwrap(),
             edit_base_color: env::var("BASE_COLOR").unwrap(),
-            dark_theme: env::var("DARK_THEME").unwrap().parse().unwrap(),
+
+            style: MaterialColors::new(
+                env::var("BASE_COLOR").unwrap(),
+                env::var("DARK_THEME").unwrap().parse().unwrap(),
+                1.5,
+            ),
             enabled: true,
             options_open: true,
             first_run: true,
@@ -52,9 +58,11 @@ impl Default for App {
 
 impl eframe::App for App {
     fn update(&mut self, ctx: &Context, _frame: &mut Frame) {
-        MaterialColors::new(self.base_color.clone(), self.dark_theme, 1.5)
-            .apply_zoom(ctx, &mut self.first_run);
+        self.style.rebuild();
 
+        self.style.apply_zoom(ctx, &mut self.first_run);
+        // MaterialColors::new(self.base_color.clone(), self.dark_theme, 1.5)
+        //     .apply_zoom(ctx, &mut self.first_run);
         egui::CentralPanel::default().show(ctx, |ui| update_fn(self, ui));
     }
 }
@@ -65,12 +73,12 @@ fn update_fn(value: &mut App, ui: &mut Ui) {
     let data = value.edit_base_color.clone().to_ascii_uppercase();
     if Argb::from_str(&data).is_ok() {
         value.edit_base_color = data.clone();
-        value.base_color = data;
+        value.style.base_color = data;
     }
 
     // // this scope applies error colors to all elements inside
     ui.scope(|ui| {
-        MaterialColors::new(value.base_color.clone(), value.dark_theme, 1.5).error_apply(ui);
+        MaterialColors::new(value.style.base_color.clone(), value.style.dark, 1.5).error_apply(ui);
         ui.button("Error button!")
     });
 
@@ -81,7 +89,7 @@ fn update_fn(value: &mut App, ui: &mut Ui) {
         .default_open(value.options_open)
         .show(ui, |ui| {
             ui.horizontal(|ui| {
-                ui.checkbox(&mut value.dark_theme, "Dark Theme");
+                ui.checkbox(&mut value.style.dark, "Dark Theme");
                 ui.checkbox(&mut value.enabled, "Enabled");
             });
         });
@@ -93,5 +101,27 @@ fn update_fn(value: &mut App, ui: &mut Ui) {
     ui.add_space(10.);
 
     ui.label("Whats your favorite color theme? personally mine is #AAE");
-}
 
+    // m3_button(ui, &value.style, "hello world");
+
+    ui.add_space(20.);
+    ui.label(
+        "I'm working on porting M3 widgets to Egui. \
+    Since I made these they don't have the same color behaviors of normal Egui components \
+    so they should work better!",
+    );
+
+    let buttons = material_egui::Button::new(&value.style);
+    ui.horizontal(|ui| {
+        buttons.elevated(ui, "Elevated button");
+        buttons.filled(ui, "Filled button");
+    });
+    ui.horizontal(|ui| {
+        buttons.filled_tonal(ui, "Filled tonal");
+        buttons.outlined(ui, "Outlined button");
+    });
+    ui.label(
+        "bounding box issue: https://github.com/toastxc/material-egui/issues/2"
+    );
+
+}
