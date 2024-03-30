@@ -1,3 +1,6 @@
+pub mod widgets;
+pub use widgets::button::Button;
+
 use egui::style::{Selection, WidgetVisuals, Widgets};
 use egui::{epaint, Color32, Context, Stroke, Style, Ui, Visuals};
 use material_colors::Argb;
@@ -63,16 +66,21 @@ fn c(i: Argb) -> Color32 {
 }
 
 impl MaterialColors {
+    pub fn rebuild(&mut self) -> Self {
+        *self = Self::new(self.base_color.clone(), self.dark, self.zoom).clone();
+        self.clone()
+    }
     pub fn new(base_color: String, dark: bool, zoom: f32) -> Self {
-        let scheme = material_colors::theme_from_source_color(
+        let data = material_colors::theme_from_source_color(
             Argb::from_str(&base_color).unwrap(),
             Default::default(),
-        )
-        .schemes;
+        );
+
         let scheme = match dark {
-            true => scheme.dark,
-            false => scheme.light,
+            true => data.schemes.dark,
+            false => data.schemes.light,
         };
+
         Self {
             base_color,
             dark,
@@ -252,4 +260,5 @@ fn widget_maker_mut(old: &mut WidgetVisuals, fill: Color32, text: Color32) {
     old.weak_bg_fill = fill;
     old.fg_stroke.color = text;
     old.bg_stroke.color = fill;
+    old.expansion = 0.;
 }
