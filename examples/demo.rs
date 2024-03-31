@@ -9,8 +9,8 @@ use std::str::FromStr;
 
 static MIN_WIDTH: f32 = 300.0;
 static DEFAULT_WIDTH: f32 = 480.0;
-static MIN_HEIGHT: f32 = 510.0;
-static DEFAULT_HEIGHT: f32 = 550.0;
+static MIN_HEIGHT: f32 = 550.0;
+static DEFAULT_HEIGHT: f32 = 560.0;
 
 fn main() {
     dotenv().ok();
@@ -120,8 +120,14 @@ fn update_fn(value: &mut App, ui: &mut Ui) {
         buttons.filled_tonal(ui, "Filled tonal");
         buttons.outlined(ui, "Outlined button");
     });
+
     ui.label(
-        "bounding box issue: https://github.com/toastxc/material-egui/issues/2"
+        "bounding box issue"
     );
+        ui.hyperlink("https://github.com/toastxc/material-egui/issues/2");
+
+
+
+
 
 }

@@ -240,6 +240,7 @@ fn widgets(p: MaterialColors) -> Widgets {
     }
     .widgets;
 
+    // widget_maker_mut(&mut old.noninteractive, p.surface, p.on_surface);
     widget_maker_mut(&mut old.noninteractive, p.surface, p.on_surface);
     widget_maker_mut(
         &mut old.inactive,
