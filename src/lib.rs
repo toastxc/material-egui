@@ -165,10 +165,11 @@ impl MaterialColors {
             warn_fg_color: p.error_container,
             error_fg_color: p.error,
 
-            window_stroke: Stroke {
-                color: p.secondary,
-                ..Default::default()
-            },
+            // window_stroke: Stroke {
+            //     color: p.secondary,
+            //     width: 10.5,
+            // },
+
             window_highlight_topmost: false,
             // todo
             widgets: widgets(p.clone()),
@@ -240,8 +241,12 @@ fn widgets(p: MaterialColors) -> Widgets {
     }
     .widgets;
 
-    // widget_maker_mut(&mut old.noninteractive, p.surface, p.on_surface);
+    //   colors.visuals.widgets.noninteractive.bg_stroke.color = Color32::RED;
     widget_maker_mut(&mut old.noninteractive, p.surface, p.on_surface);
+
+    old.noninteractive.bg_stroke.color = p.surface_variant;
+    old.noninteractive.bg_stroke.width = 4.;
+
     widget_maker_mut(
         &mut old.inactive,
         p.primary_container,
